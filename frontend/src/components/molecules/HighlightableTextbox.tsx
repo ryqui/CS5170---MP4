@@ -15,7 +15,7 @@ interface HighlightableTextBoxProps {
 }
 
 const harmContext =
-    "If the input text contains harmful, illegal, or offensive content, respond with 'Content not allowed.' and give a 1-sentence explanation.";
+    "If the input text contains harmful, illegal, or otherwise offensive content, then do not perform this request and give a couple word explanation.";
 
 const HighlightableTextBox: React.FC<HighlightableTextBoxProps> = ({
     placeholder = "Type something here...",

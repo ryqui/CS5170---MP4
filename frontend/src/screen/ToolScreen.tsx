@@ -1,4 +1,4 @@
-import React, {useState, ChangeEvent, FC } from "react";
+import React, { useState, useEffect, ChangeEvent, FC } from "react";
 import "./ToolScreen.css";
 import Dropdown from "../components/atom/Dropdown";
 import {useSettings} from "../contexts/SettingsContext";
@@ -26,7 +26,7 @@ const defaultTheme = {
  */
 const ToolScreen: FC = () => {
     // Define state with types
-    const [text, setText] = useState<string>("");
+    const [text, setText] = useState<string>(() => localStorage.getItem("prevText") || "");
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [width, setWidth] = useState<string>("90%");
@@ -36,19 +36,22 @@ const ToolScreen: FC = () => {
         setVocabLevel, 
         fontTypeface, 
         setFontTypeface,
-        backgroundColor,
         setBackgroundColor,
-        secondaryBackgroundColor,
         setSecondaryBackgroundColor,
-        accentLightColor,
         setAccentLightColor,
-        accentDarkColor,
         setAccentDarkColor,
-        fontColor,
         setFontColor,
         fontSize,
         setFontSize
     } = useSettings();
+
+    const handleTextChange = (newValue: string) => {
+        setText(newValue);
+    };
+
+    useEffect(() => {
+        localStorage.setItem("prevText", text);
+    }, [text]);
 
     // Event handler for Vocab Level
     const handleVocabLevelChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -107,7 +110,7 @@ const ToolScreen: FC = () => {
                     <div id="tool-textbox-container">
                     <HighlightableTextBox
                         value={text}
-                        onChange={(newValue) => setText(newValue)}
+                        onChange={handleTextChange}
                         placeholder="Type here and highlight text to see options"
                     />
                     </div>

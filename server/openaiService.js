@@ -18,6 +18,8 @@ const openai = new OpenAI({
     apiKey: apiKey
 });
 
+console.log("API key: " + apiKey);
+
 /**
  * Function for getting a response that simplifies text.
  * @param message The text to simplify
@@ -25,8 +27,8 @@ const openai = new OpenAI({
  * @param vocabLevel Target vocabulary level for simplification
  * @returns GPT response object
  */
-const getGPTSimplifyResponse = async (message, context, vocabLevel) => await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+const getGPTSimplifyResponse = async (message, context, vocabLevel, style) => await openai.chat.completions.create({
+    model: "gpt-4o-mini",
     messages: [
         { role: "user", content: "Simplify this text to make it easier to understand" },
         { role: "user", content: message },
@@ -41,8 +43,8 @@ const getGPTSimplifyResponse = async (message, context, vocabLevel) => await ope
  * @param context The context message to help form a response
  * @returns GPT response object
  */
-const getGPTExplainResponse = async (message, context) => await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+const getGPTExplainResponse = async (message, context, vocabLevel, style) => await openai.chat.completions.create({
+    model: "gpt-4o-mini",
     messages: [
         { role: "user", content: "Explain this in detail to help the user understand better" },
         { role: "user", content: message },
@@ -56,10 +58,10 @@ const getGPTExplainResponse = async (message, context) => await openai.chat.comp
  * @param context The context message to help form a response
  * @returns GPT response object
  */
-const getGPTDefineResponse = async (message, context) => await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+const getGPTDefineResponse = async (message, context, vocabLevel, style) => await openai.chat.completions.create({
+    model: "gpt-4o-mini",
     messages: [
-        { role: "user", content: "Define this term" },
+        { role: "user", content: "Define the text provided in an informative and descriptive way" },
         { role: "user", content: message },
         { role: "system", content: context }
     ]
@@ -71,12 +73,13 @@ const getGPTDefineResponse = async (message, context) => await openai.chat.compl
  * @param context The context message to help form a response
  * @returns GPT response object
  */
-const getGPTRewriteResponse = async (message, context, style) => await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+const getGPTRewriteResponse = async (message, context, vocabLevel, style) => await openai.chat.completions.create({
+    model: "gpt-4o-mini",
     messages: [
-        { role: "user", content: "Rewrite this text to make it more engaging" },
+        { role: "user", content: "Rewrite this based in this style: " + style },
         { role: "user", content: message },
-        { role: "user", content: style },
+        { role: "system", content: style },
+        { role: "system", content: vocabLevel },
         { role: "system", content: context }
     ]
 });

@@ -53,12 +53,13 @@ app.post('/process', async (req, res) => {
     const context = req.body.params['0']['context'];
     const vocabLevel = req.body.params['0']['vocabLevel'];
     const type = req.body.params['0']['type'];
-    const style = req.body.params['0']['style'];
+    const style = req.body.params['0']['style'] || "default";
+
     console.log(req.body.params);
+
     if (!text || !context) {
         return res.status(400).send("No text or context provided");
     }
-
 
     if (!type || !['explain', 'define', 'simplify', 'rewrite'].includes(type)) {
         return res.status(400).send("Invalid or missing type");
@@ -76,7 +77,8 @@ app.post('/process', async (req, res) => {
             res.send("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         } else {
             const response = await gptFunctions[type](text, context, vocabLevel, style);
-            res.send(response.choices[0].text.content);
+            console.log(response.choices[0])
+            res.send(response.choices[0].message.content);
         }
     } catch (error) {
         console.error("Error processing request:", error);
