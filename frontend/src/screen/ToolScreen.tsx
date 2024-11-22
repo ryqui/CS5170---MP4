@@ -1,13 +1,10 @@
-import React, {useState, ChangeEvent, FC, useRef, useEffect} from "react";
+import React, {useState, ChangeEvent, FC } from "react";
 import "./ToolScreen.css";
 import Dropdown from "../components/atom/Dropdown";
-import {createSummarizeResponseService, createTTSResponseService, } from "../services/backend-service"
 import {useSettings} from "../contexts/SettingsContext";
 import ColorPicker from "../components/molecules/ColorPicker";
 import HighlightableTextBox from "../components/molecules/HighlightableTextbox";
 import { vocabLevels, getInstructionForLevel } from "../utils/VocabLevels";
-import { set } from "react-hook-form";
-
 
 const defaultColors = [
     "#c7afcc", "#7b9085", "#6c97a5", "#eadad6", "#9c85ea", "#f1ba8f", "#FFFFFF", "#555555"
@@ -22,8 +19,6 @@ const defaultTheme = {
     Text: "#000000"
 };
 
-const harmContext =
-    "If the input text contains harmful, illegal, or offensive content, respond with 'Content not allowed.' and give a 1-sentence explanation.";
 
 /**
  * Summarize screen, allows user to input text and ask the system to summarize for the text for them.
@@ -31,13 +26,10 @@ const harmContext =
  */
 const ToolScreen: FC = () => {
     // Define state with types
-    const fileInputRef = useRef(null);
     const [text, setText] = useState<string>("");
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [width, setWidth] = useState<string>("90%");
-    const [tool, settool] = useState<string>("");
-    const [errorMessage, setErrorMessage] = useState<string>("");
 
     const {voice, 
         vocabLevel, 
@@ -57,9 +49,6 @@ const ToolScreen: FC = () => {
         fontSize,
         setFontSize
     } = useSettings();
-    const [soundPath, setSoundPath] = useState<string>("");
-    const [responseTTSStream, setResponseTTSStream] = useState(null);
-    const [isToSpeech, setIsToSpeech] = useState<boolean>(false);
 
     // Event handler for Vocab Level
     const handleVocabLevelChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -101,105 +90,9 @@ const ToolScreen: FC = () => {
         setTheme(newTheme);
     };
 
-    // Request file upload dialog
-    const handleFileUpload = () => {
-        fileInputRef.current.click();
-    };
-
-    // Summarize requests synthesis, we send user's input to our server, and our server will handle communication to OpenAPI
-    const ttsSynth = async (toolText) => {
-        setIsToSpeech(false);
-        if (toolText !== null && toolText !== "") {
-            const ttsResponse = await createTTSResponseService().post({message: toolText, voice: voice.toLowerCase()});
-            setResponseTTSStream(ttsResponse);
-            if (!ttsResponse.ok) {
-                throw new Error("Failed to fetch audio");
-            }
-
-            const blob = await ttsResponse.blob();
-            const url = URL.createObjectURL(blob);
-            setSoundPath(url);
-        }
-    }
-
-    // Detects if the response from server is received. If yes, we allow user to play the audio
-    useEffect(() => {
-        if (responseTTSStream !== null && responseTTSStream.status === 200) {
-            setIsToSpeech(true);
-        }
-    }, [responseTTSStream]);
-
-    // Detects if user change to different voice in the settings. We want the voice to accurately reflect what user
-    // chose, this part is automatically, since the synthesis is part of the summarize process
-    useEffect(() => {
-        ttsSynth(tool)
-    }, [voice]);
-
-    const handleSummarize = async () => {
-        // Submit logic will go here
-        if (!text.trim()) return;
-
-        setIsLoading(true);
-        setIsSubmitted(true); // Trigger animations and state changes
-        setIsToSpeech(false);
-        // Animation
-        setWidth("45%");
-
-        const vocabInstruction = getInstructionForLevel(vocabLevel);
-        try {
-            // Request tool
-            const response = await createSummarizeResponseService().post({
-                message: text.trim(),
-                context: harmContext,
-                vocabLevel: vocabInstruction,
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch tool");
-            }
-
-            const toolText = await response.text(); // Assuming BE returns plain text
-            settool(toolText); // Display the tool in the new textbox
-            await ttsSynth(toolText);
-        } catch (error) {
-            setErrorMessage("Failed to generate tool. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    // Handle file read
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (e.target === null) {
-                    setText("");
-                } else {
-                    const result = e.target?.result;
-                    if (typeof result === "string") {
-                        setText(result);
-                    } else {
-                        console.error("FileReader result is not a string");
-                    }
-                }
-            };
-            reader.readAsText(file);
-        }
-    };
-
-    // Handle back button from finish summarizing back to the start
-    const backButton = () => {
-        setIsSubmitted(false);
-        setWidth("90%");
-    }
-
     return (
         <div id="tool-screen">
             <div className="flex-box">
-                <input type="file" ref={fileInputRef} style={{display: 'none'}}
-                    accept=".txt" onChange={handleFileChange}/>
                 <div id="tool-input-container" style={{width: width}}>
                     <div id="tool-title-wrapper">
                         <div id="tool-title" className="center-text disable-selection">
@@ -220,18 +113,21 @@ const ToolScreen: FC = () => {
                     />
                     </div>
                     <div id="tool-display-settings">
-                        <div id="color-picker">
-                            <ColorPicker 
-                                label="" 
-                                colors={defaultColors} 
-                                selectedColor={theme.Background} 
-                                onColorSelect={(color) => { handleColorSelect(color); }} 
-                            />
-                        </div>
+                        <ColorPicker 
+                            label="" 
+                            colors={defaultColors} 
+                            selectedColor={theme.Background} 
+                            onColorSelect={(color) => { handleColorSelect(color); }} 
+                        />
                         <Dropdown
                             options={fontTypefaces}
                             value={fontTypeface}
                             onChange={handleFontStyleChange}
+                        />
+                        <Dropdown
+                            options={["12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt"]}
+                            value={fontSize}
+                            onChange={(event) => setFontSize(event.target.value)}
                         />
                     </div>
                     <div id="ai-inaccurate-message">

@@ -36,6 +36,29 @@ const HighlightableTextBox: React.FC<HighlightableTextBoxProps> = ({
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
+    const handleKeyUp = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Tab") {
+            // Do not deselect text when tabbing
+        } else {
+            handleTextSelection(event as unknown as KeyboardEvent);
+        }
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Tab") {
+            event.preventDefault();
+            const textarea = textareaRef.current;
+            if (textarea) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const updatedValue =
+                    value.slice(0, start) + "\t" + value.slice(end);
+                onChange?.(updatedValue);
+                textarea.selectionStart = textarea.selectionEnd = start + 1;
+            }
+        }
+    };
+
     const handleClickAway = (event: MouseEvent) => {
         if (
             popupRef.current?.contains(event.target as Node) ||
@@ -173,15 +196,15 @@ const HighlightableTextBox: React.FC<HighlightableTextBoxProps> = ({
         const textarea = textareaRef.current;
         if (!textarea) return;
 
-        textarea.addEventListener("mouseup", handleClickAway);
+        textarea.addEventListener("mouseup", handleTextSelection);
+        document.addEventListener("mousedown", handleClickAway);
         textarea.addEventListener("keyup", handleTextSelection);
         textarea.addEventListener("scroll", handleScroll);
-        document.addEventListener("mousedown", handleClickAway);
 
         return () => {
-            textarea.removeEventListener("mouseup", handleClickAway);
             textarea.removeEventListener("keyup", handleTextSelection);
             textarea.removeEventListener("scroll", handleScroll);
+            textarea.removeEventListener("mouseup", handleTextSelection);
             document.removeEventListener("mousedown", handleClickAway);
         };
     }, []);
@@ -196,7 +219,7 @@ const HighlightableTextBox: React.FC<HighlightableTextBoxProps> = ({
                 rows={rows}
                 className="highlightable-textbox"
                 readOnly={readonly}
-                onMouseUp={handleTextSelection}
+                onKeyDown={handleTextSelection}
             />
             {/* Popup menu */}
             {showPopup && (

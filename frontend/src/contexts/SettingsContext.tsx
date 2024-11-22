@@ -84,10 +84,10 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) 
     () => localStorage.getItem("secondaryBackgroundColor") || "#f1f1f1"
   );
   const [accentLightColor, setAccentLightColor] = useState(
-    () => localStorage.getItem("accentLightColor") || "#f1f1f1"
+    () => localStorage.getItem("accentLightColor") || "#A8A8A8"
   );
   const [accentDarkColor, setAccentDarkColor] = useState(
-    () => localStorage.getItem("accentDarkColor") || "#f1f1f1"
+    () => localStorage.getItem("accentDarkColor") || "#333333"
   );
   const [fontColor, setFontColor] = useState(
     () => localStorage.getItem("fontColor") || "#000000"
