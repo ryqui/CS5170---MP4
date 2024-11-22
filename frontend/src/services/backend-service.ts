@@ -1,6 +1,7 @@
 /**
  * fetch wrapper, that acts as an HTTP Service for POST and GET requests
  * @author Khoa Nguyen
+ * @author Ryan Quinn
  */
 class HttpService {
     private readonly baseURL: string;
@@ -36,45 +37,6 @@ class HttpService {
 }
 
 /**
- * Endpoint: /summarize
- * Send data to OpenAI API to summarize
- * @param req Request from client. Should contain:
- *      - 'message': text to summarize
- *      - 'context': instruct OpenAPI about what potential avoidance and dangerous content
- *      - 'vocabLevel': level of vocabulary that we expect from OpenAI API response
- * @return string summarization from OpenAI API
- */
-const createSummarizeResponseService = () => {
-    return new HttpService("/summarize");
-}
-
-/**
- * Endpoint: /tts
- * Send data to OpenAI API to synthesize into text-to-speech
- * @param req Request from client. Should contain:
- *      - 'message': text to synthesize
- *      - 'voice': voice to use for the output
- * @return arrayBuffer array buffer data that can be converted into blob for playing mp3
- */
-const createTTSResponseService = () => {
-    return new HttpService("/tts");
-}
-
-/**
- * Endpoint: /feedback
- * Take feedback data from client and append it to the server's CSV file
- * @param req Request from client. Should contain:
- *      - 'summarizationScore': score that the user rate for the summarization feature
- *      - 'ttsScore': score that the user rate for the tts feature
- *      - 'customizationScore': score that the user rate for the customization feature
- *      - 'other': other comments user might have
- * @return string whether the response is recorded or not
- */
-const createFeedbackResponseService = () => {
-    return new HttpService("/feedback");
-}
-
-/**
  * Endpoint: /process
  * Send data to OpenAI API to process
  * @param req Request from client. Should contain:
@@ -88,9 +50,4 @@ const createProcessResponseService = () => {
     return new HttpService("/process");
 }
 
-export {
-    createSummarizeResponseService,
-    createTTSResponseService,
-    createFeedbackResponseService,
-    createProcessResponseService
-};
+export { createProcessResponseService };

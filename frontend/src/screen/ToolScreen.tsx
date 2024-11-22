@@ -98,12 +98,11 @@ const ToolScreen: FC = () => {
                         <div id="tool-title" className="center-text disable-selection">
                             <p>Source</p>
                         </div>
-                        {!isLoading && !isSubmitted &&
                         <Dropdown
                             options={vocabLevels.map((level) => level.level)}
                             value={vocabLevel}
                             onChange={handleVocabLevelChange}
-                        />}
+                        />
                     </div>
                     <div id="tool-textbox-container">
                     <HighlightableTextBox

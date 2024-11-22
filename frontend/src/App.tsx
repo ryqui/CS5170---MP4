@@ -1,6 +1,6 @@
 import "./App.css";
 import ToolScreen from "./screen/ToolScreen"
-import Modal from "./components/Modal";
+import Modal from "./components/molecules/Modal";
 
 import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
 import React, { useState } from "react";

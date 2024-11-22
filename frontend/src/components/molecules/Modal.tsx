@@ -1,6 +1,6 @@
 import React from "react";
 import "./Modal.css";
-import CloseButton from "../assets/close.png"
+import CloseButton from "../../assets/close.png"
 import { useRef, useEffect } from "react";
 
 interface ModalProps {
