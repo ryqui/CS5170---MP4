@@ -1,13 +1,8 @@
 import React, {useState, ChangeEvent, FC, useRef, useEffect} from "react";
 import "./ToolScreen.css";
-import UploadFileButton from "../components/molecules/UploadFileButton";
-import SubmitButton from "../components/molecules/SubmitButton";
 import Dropdown from "../components/atom/Dropdown";
 import {createSummarizeResponseService, createTTSResponseService, } from "../services/backend-service"
-import Loading from "../components/atom/Loading";
-import PlayVoiceButton from "../components/molecules/PlayVoiceButton";
 import {useSettings} from "../contexts/SettingsContext";
-import BackButton from "../components/molecules/BackButton";
 import ColorPicker from "../components/molecules/ColorPicker";
 import HighlightableTextBox from "../components/molecules/HighlightableTextbox";
 import { vocabLevels, getInstructionForLevel } from "../utils/VocabLevels";
@@ -53,6 +48,10 @@ const ToolScreen: FC = () => {
         setBackgroundColor,
         secondaryBackgroundColor,
         setSecondaryBackgroundColor,
+        accentLightColor,
+        setAccentLightColor,
+        accentDarkColor,
+        setAccentDarkColor,
         fontColor,
         setFontColor,
         fontSize,
@@ -81,6 +80,8 @@ const ToolScreen: FC = () => {
         setBackgroundColor(color);
         setFontColor(wcagCompliantTextColor);
         setSecondaryBackgroundColor(secondary);
+        setAccentLightColor(lightAccent);
+        setAccentDarkColor(darkAccent);
         
         const newTheme = { 
             Background: color, 
@@ -237,18 +238,6 @@ const ToolScreen: FC = () => {
                         Note: The AI may not always provide accurate or appropriate responses. Please check all information for accuracy.
                     </div>
                 </div>
-
-                {isSubmitted &&
-                    <div id="tool-output-container">
-                        <div id="tool-title-wrapper">
-                            <BackButton size={35} onClick={backButton} inverseColor={true}/>
-                            <div id="tool-title" className="center-text disable-selection">
-                                <p>tool</p>
-                            </div>
-                            {isToSpeech && <PlayVoiceButton size={35} soundPath={soundPath} pauseOnToggle={true} inverseColor={true}/>}
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     );

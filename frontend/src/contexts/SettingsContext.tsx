@@ -9,6 +9,10 @@ interface SettingsContextType {
   setBackgroundColor: React.Dispatch<React.SetStateAction<string>>;
   secondaryBackgroundColor: string;
   setSecondaryBackgroundColor: React.Dispatch<React.SetStateAction<string>>;
+  accentLightColor: string;
+  setAccentLightColor: React.Dispatch<React.SetStateAction<string>>;
+  accentDarkColor: string;
+  setAccentDarkColor: React.Dispatch<React.SetStateAction<string>>;
   fontColor: string;
   setFontColor: React.Dispatch<React.SetStateAction<string>>;
   fontTypeface: string;
@@ -79,6 +83,12 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) 
   const [secondaryBackgroundColor, setSecondaryBackgroundColor] = useState(
     () => localStorage.getItem("secondaryBackgroundColor") || "#f1f1f1"
   );
+  const [accentLightColor, setAccentLightColor] = useState(
+    () => localStorage.getItem("accentLightColor") || "#f1f1f1"
+  );
+  const [accentDarkColor, setAccentDarkColor] = useState(
+    () => localStorage.getItem("accentDarkColor") || "#f1f1f1"
+  );
   const [fontColor, setFontColor] = useState(
     () => localStorage.getItem("fontColor") || "#000000"
   );
@@ -123,6 +133,16 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) 
   }, [secondaryBackgroundColor]);
 
   useEffect(() => {
+    updateCSSVariable("--accent-light-color", accentLightColor);
+    localStorage.setItem("accentLightColor", accentLightColor);
+  }, [accentLightColor]);
+
+  useEffect(() => {
+    updateCSSVariable("--accent-dark-color", accentDarkColor);
+    localStorage.setItem("accentDarkColor", accentDarkColor);
+  }, [accentDarkColor]);
+
+  useEffect(() => {
     updateCSSVariable("--textbox-font-color", fontColor);
     localStorage.setItem("fontColor", fontColor);
   }, [fontColor]);
@@ -163,6 +183,10 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) 
         setBackgroundColor,
         secondaryBackgroundColor,
         setSecondaryBackgroundColor,
+        accentLightColor,
+        setAccentLightColor,
+        accentDarkColor,
+        setAccentDarkColor,
         fontColor,
         setFontColor,
         fontTypeface,
