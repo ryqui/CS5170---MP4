@@ -1,0 +1,25 @@
+:root {
+    --main-black: #333333;
+    --main-white: #F5F5F5;
+    --main-gray: #A8A8A8;
+    --main-hover: #505050;
+    --main-hover-light: #ccc;
+    --subtle-background: #f9f9f9;
+
+    --textbox-background-color: #ffffff;
+    --textbox-font-color: #000000;
+    --textbox-font-family: Arial, sans-serif;
+    --textbox-font-weight: normal;
+    --textbox-font-size: 12pt;
+    --textbox-font-style: normal;
+    --textbox-text-decoration: none;
+    
+    --secondary-background-color: #f9f9f9;
+    --secondary-font-color: #000000;
+    --accent-light-color: #A8A8A8;
+    --accent-dark-color: #333333;
+}
+
+body {
+  background-color: var(--secondary-background-color);
+}
