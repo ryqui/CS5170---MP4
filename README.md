@@ -1,6 +1,6 @@
-<p align="center"><img src="res/icon.png"></p> 
-<h1 align="center"><b>ReadEase</b></h1>
-<h4 align="center">An Assistive Learning Platform for Dyslexia</h4>
+<h1 align="center"><b>Mini Project 4</b></h1>
+<h4 align="center">Designing a Human-Centered AI Web Interface to Support People with Disabilities</h4>
+> By Ryan Quinn
 
 ### Installation
 - For dependencies for both frontend and server directory, run `npm i`
