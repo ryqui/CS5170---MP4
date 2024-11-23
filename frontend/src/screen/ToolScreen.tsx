@@ -21,8 +21,15 @@ const defaultTheme = {
 
 
 /**
- * Summarize screen, allows user to input text and ask the system to summarize for the text for them.
- * The process should go: input text -> summarize (OpenAI API request) -> synthesis (OpenAI API request)
+ * ToolScreen component.
+ * 
+ * This component represents a screen where users can input text, select vocabulary levels, 
+ * change font styles, and customize the theme colors. It uses various states to manage 
+ * the input text, submission status, loading status, and theme settings.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} The rendered ToolScreen component.
  */
 const ToolScreen: FC = () => {
     // Define state with types

@@ -17,6 +17,27 @@ interface HighlightableTextBoxProps {
 const harmContext =
     "If the input text contains harmful, illegal, or otherwise offensive content, then do not perform this request and give a couple word explanation.";
 
+/**
+ * HighlightableTextBox component allows users to highlight text within a textarea and perform various AI-powered actions on the selected text.
+ * 
+ * @component
+ * @param {HighlightableTextBoxProps} props - The properties for the HighlightableTextBox component.
+ * @param {string} [props.placeholder="Type something here..."] - The placeholder text for the textarea.
+ * @param {number} [props.rows=5] - The number of rows for the textarea.
+ * @param {string} [props.value=""] - The current value of the textarea.
+ * @param {boolean} [props.readonly=false] - Whether the textarea is read-only.
+ * @param {function} [props.onChange] - The function to call when the textarea value changes.
+ * 
+ * @returns {JSX.Element} The rendered HighlightableTextBox component.
+ * 
+ * @example
+ * <HighlightableTextBox
+ *   placeholder="Enter text here..."
+ *   rows={10}
+ *   value={textValue}
+ *   onChange={(newValue) => setTextValue(newValue)}
+ * />
+ */
 const HighlightableTextBox: React.FC<HighlightableTextBoxProps> = ({
     placeholder = "Type something here...",
     rows = 5,
